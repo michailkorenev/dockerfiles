@@ -2,26 +2,20 @@ version: '3'
 
 services:
   server:
-    image: nginx
+    build: 
+      context: ./alpine/nginx/
     restart: always
     env_file: env
     volumes:
-      # Vhost configuration
-      #- ./config/caddy/Caddyfile:/etc/caddy/Caddyfiledocker-com
-      - ./config/nginx/in-vhost.conf:/etc/nginx/conf.d/in-vhost.conf:ro
       - ./docker/app/public:/var/www/app/public:ro
     depends_on:
       - app
-    # Run webserver nginx on port 80
-    # Feel free to modify depending what port is already occupied
     ports:
       - "80:80"
-      #- "443:443"
     networks:
       - invoiceninja
 
   app:
-    #image: invoiceninja/invoiceninja:5
     build: 
       context: ./alpine/5/
       args: 
@@ -39,11 +33,6 @@ services:
 
   db:
     image: mysql:5
-#    When running on ARM64 use MariaDB instead of MySQL
-#    image: mariadb:10.4
-#    For auto DB backups comment out image and use the build block below
-#    build:
-#      context: ./config/mysql
     ports:
       - "3305:3306"
     restart: always
