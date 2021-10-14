@@ -110,4 +110,5 @@ if [[ "$1" == "supervisord" ]] || [[ "$1" == "php-fpm" ]]; then
     . invoiceninja-init.sh
 fi
 
+chown -R www-data:www-data "/var/www/app"
 exec docker-php-entrypoint "$@"

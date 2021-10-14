@@ -3,7 +3,8 @@ ARG BAK_STORAGE_PATH=/var/www/app/docker-backup-storage/
 ARG BAK_PUBLIC_PATH=/var/www/app/docker-backup-public/
 
 # Get Invoice Ninja and install nodejs packages
-FROM --platform=$BUILDPLATFORM node:lts-alpine as build
+#FROM --platform=$BUILDPLATFORM node:lts-alpine as build
+FROM node:lts-alpine as build
 
 # Download Invoice Ninja
 ARG INVOICENINJA_VERSION
@@ -21,8 +22,7 @@ WORKDIR /var/www/app/
 # Install node packages
 ARG BAK_STORAGE_PATH
 ARG BAK_PUBLIC_PATH
-RUN --mount=target=/var/www/app/node_modules,type=cache \
-    npm install --production \
+RUN npm install --production \
     && npm run production \
     && mv /var/www/app/storage $BAK_STORAGE_PATH \
     && mv /var/www/app/public $BAK_PUBLIC_PATH  
@@ -62,18 +62,6 @@ RUN set -eux; \
 # Copy files
 COPY rootfs /
 
-## Create user
-ARG UID=1500
-ENV INVOICENINJA_USER invoiceninja
-
-RUN addgroup --gid=$UID -S "$INVOICENINJA_USER" \
-    && adduser --uid=$UID \
-    --disabled-password \
-    --gecos "" \
-    --home "/var/www/app" \
-    --ingroup "$INVOICENINJA_USER" \
-    "$INVOICENINJA_USER"
-
 # Set up app
 ARG INVOICENINJA_VERSION
 ARG BAK_STORAGE_PATH
@@ -81,9 +69,8 @@ ARG BAK_PUBLIC_PATH
 ENV INVOICENINJA_VERSION $INVOICENINJA_VERSION
 ENV BAK_STORAGE_PATH $BAK_STORAGE_PATH
 ENV BAK_PUBLIC_PATH $BAK_PUBLIC_PATH
-COPY --from=build --chown=$INVOICENINJA_USER:$INVOICENINJA_USER /var/www/app /var/www/app
+COPY --from=build --chown=www-data:www-data /var/www/app /var/www/app
 
-USER $UID
 WORKDIR /var/www/app
 
 # Do not remove this ENV
