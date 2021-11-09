@@ -1,8 +1,9 @@
 name: Check Invoice Ninja version
 
-on:
-  schedule:
-    - cron:  '*/10 * * * *'
+#on:
+#  schedule:
+#    - cron:  '*/10 * * * *'
+on: workflow_dispatch
 
 jobs:
   version-check:
