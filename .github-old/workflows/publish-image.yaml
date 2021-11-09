@@ -4,13 +4,21 @@ name: Publish Container Image
 # architectures and push all of them to Docker Hub.
 # Only trigger on semver shaped tags.
 # Ref: https://github.com/metcalfc/docker-action-examples/blob/main/.github/workflows/release.yml
-on:
-  push:
-    tags-ignore:
-      - "invoiceninja-*"
+#on:
+#  push:
+#    tags-ignore:
+#      - "invoiceninja-*"
+
+on: 
+  workflow_call:
+    inputs:
+      INVOICENINJA_VERSION:
+        required: true
+        type: string
 
 jobs:
-  docker:
+
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -19,11 +27,8 @@ jobs:
       - name: Prepare
         id: prep
         run: |
-          DOCKER_IMAGE=invoiceninja/invoiceninja
-          VERSION=edge
-          if [[ $GITHUB_REF == refs/tags/* ]]; then
-            VERSION=${GITHUB_REF#refs/tags/}
-          fi
+          DOCKER_IMAGE=michailkorenev/invoiceninja
+          VERSION=${{ inputs.INVOICENINJA_VERSION }}
           TAGS="${DOCKER_IMAGE}:${VERSION}"
           MAJOR="$(echo "${VERSION}" | cut -d. -f1)"
           MINOR="$(echo "${VERSION}" | cut -d. -f2)"

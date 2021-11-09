@@ -1,18 +1,19 @@
-name: Build Container Image v4
+name: Build Container Image
 
 # When its time to do a release do a full cross platform build for all supported
 # architectures and push all of them to Docker Hub.
 # Only trigger on semver shaped tags.
 # Ref: https://github.com/metcalfc/docker-action-examples/blob/main/.github/workflows/release.yml
-on:
-  pull_request:
-    paths:
-      - "alpine/4/**"
-  push:
-    paths:
-      - "alpine/4/**"
-    branches:
-      - master
+#on:
+#  pull_request:
+#    paths:
+#      - "alpine/5/**"
+#  push:
+#    paths:
+#      - "alpine/5/**"
+#    branches:
+#      - master
+on: workflow_dispatch
 
 jobs:
   docker:
@@ -34,17 +35,17 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-4-${{ hashFiles('alpine/5/cache_buster') }}-${{ github.sha }}
+          key: ${{ runner.os }}-buildx-5-${{ hashFiles('alpine/5/cache_buster') }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-buildx-4-${{ hashFiles('alpine/5/cache_buster') }}-
+            ${{ runner.os }}-buildx-5-${{ hashFiles('alpine/5/cache_buster') }}-
 
       - name: Build
         id: docker_build
         uses: docker/build-push-action@v2
         with:
           builder: ${{ steps.buildx.outputs.name }}
-          context: ./alpine/4/
-          build-args: INVOICENINJA_VERSION=4.5.42
+          context: ./alpine/5/
+          build-args: INVOICENINJA_VERSION=5-stable
           target: prod
           platforms: linux/amd64,linux/arm64
           tags: invoiceninja/invoiceninja:cache
