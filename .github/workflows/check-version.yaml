@@ -44,11 +44,12 @@ jobs:
           echo ::set-output name=NINJA_CURRENT::${NINJA_CURRENT}
     outputs:
       NINJA_CURRENT: ${{ steps.check.outputs.NINJA_CURRENT }}
+      update_required: ${{ steps.check.outputs.update_required }}
 
   call-publish-image:
     name: Call publish-image workflow
     needs: version_check
-    if: version-check.steps.check.outputs.update_required == 'yes'  
+    if: needs.version_check.outputs.update_required == 'yes'  
     uses: michailkorenev/invoiceninja-dockerfiles/.github/workflows/publish-image.yaml@master
     with: 
       INVOICENINJA_VERSION: ${{ needs.version_check.outputs.NINJA_CURRENT }}
