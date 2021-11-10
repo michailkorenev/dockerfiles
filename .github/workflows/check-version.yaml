@@ -6,7 +6,7 @@ name: Check Invoice Ninja version
 on: workflow_dispatch
 
 jobs:
-  version-check:
+  version_check:
     name: Check IN version
     runs-on: ubuntu-latest
     steps:
@@ -47,10 +47,10 @@ jobs:
 
   call-publish-image:
     name: Call publish-image workflow
-    needs: version-check
+    needs: version_check
     if: version-check.steps.check.outputs.update_required == 'yes'  
     uses: michailkorenev/invoiceninja-dockerfiles/.github/workflows/publish-image.yaml@master
     with: 
-      INVOICENINJA_VERSION: ${{ needs.version-check.outputs.NINJA_CURRENT }}
+      INVOICENINJA_VERSION: ${{ needs.version_check.outputs.NINJA_CURRENT }}
 
         
