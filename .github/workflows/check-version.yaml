@@ -7,6 +7,7 @@ on: workflow_dispatch
 
 jobs:
   version-check:
+    name: Check IN version
     runs-on: ubuntu-latest
     steps:
       - name: Getting version of latest Docker tag
@@ -43,9 +44,11 @@ jobs:
           echo ::set-output name=NINJA_CURRENT::${NINJA_CURRENT}
 
   call-publish-image:
+    name: Check IN version
+    needs: version-check
     if: version-check.steps.check.outputs.update_required == 'yes'  
     uses: michailkorenev/invoiceninja-dockerfiles/.github/workflows/publish-image.yaml@master
     with: 
-      INVOICENINJA_VERSION: ${{ version-check.steps.check.outputs.NINJA_CURRENT }}
+      INVOICENINJA_VERSION: ${{ jobs.version-check.steps.check.outputs.NINJA_CURRENT }}
 
         
