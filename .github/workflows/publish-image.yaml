@@ -15,6 +15,12 @@ on:
       INVOICENINJA_VERSION:
         required: true
         type: string
+    secrets:
+      DOCKERHUB_USERNAME:
+        required: true
+    secrets:
+      DOCKERHUB_PASSWORD:
+        required: true        
 
 jobs:
 
