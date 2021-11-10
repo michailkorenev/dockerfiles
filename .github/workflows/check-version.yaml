@@ -23,8 +23,6 @@ jobs:
           #NINJA_CURRENT="$(wget -T 15 -qO- https://raw.githubusercontent.com/invoiceninja/invoiceninja/v5-stable/VERSION.txt)"
           NINJA_CURRENT="5.3.25"
           NINJA_DOCKER=${{ steps.jq.outputs.value }}
-          echo "NINJA_CURRENT: ${NINJA_CURRENT}"
-          echo "NINJA_DOCKER: ${NINJA_DOCKER}"
           update_required="no"
           set -f
           array_ninja_installed=(${ninja_installed//./ })
@@ -40,6 +38,9 @@ jobs:
             update_required="yes"
             fi
           done
+          echo "NINJA_CURRENT: ${NINJA_CURRENT}"
+          echo "NINJA_DOCKER: ${NINJA_DOCKER}"
+          echo "update_required: ${update_required}"
           echo ::set-output name=update_required::${update_required}
           echo ::set-output name=NINJA_CURRENT::${NINJA_CURRENT}
     outputs:
