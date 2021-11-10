@@ -110,5 +110,8 @@ if [[ "$1" == "supervisord" ]] || [[ "$1" == "php-fpm" ]]; then
     . invoiceninja-init.sh
 fi
 
-chown -R www-data:www-data "/var/www/app"
+if [ "$(ls -ld /var/www/app/storage | awk '{print $3}')" != "www-data" ]; then
+    echo "chown /var/www/app"
+    chown -R www-data:www-data "/var/www/app"
+fi
 exec docker-php-entrypoint "$@"
