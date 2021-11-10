@@ -14,7 +14,7 @@ jobs:
         uses: sergeysova/jq-action@v2
         with:
           cmd: |
-            curl -L --fail "https://hub.docker.com/v2/repositories/michailkorenev/invoiceninja/tags/?page_size=1000" | jq '.results | .[] | .name' -r | sed 's/latest//' | sort --V | tail -n 1
+            curl -L --fail "https://hub.docker.com/v2/repositories/michailkorenev/invoiceninja/tags/?page_size=1000" | jq '.results | .[] | .name' -r | sed 's/latest//' | sort -V | tail -n 1
 
       - name: Version check
         id: check
