@@ -21,7 +21,7 @@ jobs:
         id: check
         run: |
           #NINJA_CURRENT="$(wget -T 15 -qO- https://raw.githubusercontent.com/invoiceninja/invoiceninja/v5-stable/VERSION.txt)"
-          NINJA_CURRENT="5.3.24"
+          NINJA_CURRENT="5.3.25"
           NINJA_DOCKER=${{ steps.jq.outputs.value }}
           echo "NINJA_CURRENT: ${NINJA_CURRENT}"
           echo "NINJA_DOCKER: ${NINJA_DOCKER}"
