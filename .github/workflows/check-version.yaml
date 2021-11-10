@@ -25,8 +25,8 @@ jobs:
           NINJA_DOCKER=${{ steps.jq.outputs.value }}
           update_required="no"
           set -f
-          array_ninja_installed=(${ninja_installed//./ })
-          array_ninja_current=(${ninja_current//./ })
+          array_ninja_installed=(${NINJA_DOCKER//./ })
+          array_ninja_current=(${NINJA_CURRENT//./ })
           if (( ${#array_ninja_installed[@]} == "2" ))
           then
             array_ninja_installed+=("0")
