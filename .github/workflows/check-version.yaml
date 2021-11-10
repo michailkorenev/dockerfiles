@@ -20,8 +20,8 @@ jobs:
       - name: Version check
         id: check
         run: |
-          #NINJA_CURRENT="$(wget -T 15 -qO- https://raw.githubusercontent.com/invoiceninja/invoiceninja/v5-stable/VERSION.txt)"
-          NINJA_CURRENT="5.3.25"
+          date
+          NINJA_CURRENT="$(wget -T 15 -qO- https://raw.githubusercontent.com/invoiceninja/invoiceninja/v5-stable/VERSION.txt)"
           NINJA_DOCKER=${{ steps.jq.outputs.value }}
           update_required="no"
           set -f
