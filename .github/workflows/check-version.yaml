@@ -3,7 +3,6 @@ name: Check Invoice Ninja version
 on:
   schedule:
     - cron:  '25 8 * * 3'
-#on: workflow_dispatch
 
 jobs:
   version_check:

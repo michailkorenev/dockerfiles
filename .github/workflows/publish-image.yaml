@@ -1,14 +1,5 @@
 name: Publish Container Image
 
-# When its time to do a release do a full cross platform build for all supported
-# architectures and push all of them to Docker Hub.
-# Only trigger on semver shaped tags.
-# Ref: https://github.com/metcalfc/docker-action-examples/blob/main/.github/workflows/release.yml
-#on:
-#  push:
-#    tags-ignore:
-#      - "invoiceninja-*"
-
 on: 
   workflow_call:
     inputs:
