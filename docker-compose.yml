@@ -1,46 +1,64 @@
-version: '3'
+version: '2'
 
 services:
   server:
-    build: 
-      context: ./alpine/nginx/
+    image: michailkorenev/nginx-invoiceninja:0.0.1
     restart: always
-    env_file: env
     volumes:
       - ./docker/app/public:/var/www/app/public:ro
     depends_on:
       - app
     ports:
       - "80:80"
-    networks:
-      - invoiceninja
 
   app:
-    build: 
-      context: ./alpine/5/
-      args: 
-        INVOICENINJA_VERSION: 5.3.23
-    env_file: env
+    image: michailkorenev/invoiceninja:5.3.23
     restart: always
+    environment:
+      # IN application vars
+      APP_URL: "http://in.localhost:8003"
+      APP_KEY: "base64:JXhFLDDmy8xFe1OpxJyhi9KCW+BNQiwkFDENyCVxzTg="
+      APP_DEBUG: "false"
+      REQUIRE_HTTPS: "false"
+      PHANTOMJS_PDF_GENERATION: "false"
+      PDF_GENERATOR: "snappdf"
+      QUEUE_CONNECTION: "database"
+      # DB connection
+      DB_HOST: "db"
+      DB_PORT: "3306"
+      DB_DATABASE: "ninja"
+      DB_USERNAME: "ninja"
+      DB_PASSWORD: "ninja"
+      # Create initial user
+      # Default to these values if empty
+      # IN_USER_EMAIL=admin@example.com
+      # IN_PASSWORD=changeme!
+      IN_USER_EMAIL: 
+      IN_PASSWORD: 
+      # Mail options
+      MAIL_MAILER: "log"
+      MAIL_HOST: "smtp.mailtrap.io"
+      MAIL_PORT: "2525"
+      MAIL_USERNAME: "null"
+      MAIL_PASSWORD: "null"
+      MAIL_ENCRYPTION: "null"
+      MAIL_FROM_ADDRESS: "user@example.com"
+      MAIL_FROM_NAME: "Self Hosted User"
     volumes:
-      - ./config/hosts:/etc/hosts:ro
       - ./docker/app/public:/var/www/app/public:rw,delegated
       - ./docker/app/storage:/var/www/app/storage:rw,delegated
     depends_on:
       - db
-    networks:
-      - invoiceninja
 
   db:
     image: mysql:5
     ports:
       - "3305:3306"
     restart: always
-    env_file: env
+    environment:    
+      MYSQL_ROOT_PASSWORD: "ninjaAdm1nPassword"
+      MYSQL_USER: "ninja"
+      MYSQL_PASSWORD: "ninja"
+      MYSQL_DATABASE: "ninja"
     volumes:
       - ./docker/mysql/data:/var/lib/mysql:rw,delegated
-    networks:
-      - invoiceninja
-
-networks:
-  invoiceninja:

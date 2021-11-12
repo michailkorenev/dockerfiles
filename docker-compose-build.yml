@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+  server:
+    build: 
+      context: ./alpine/nginx/
+    restart: always
+    env_file: env
+    volumes:
+      - ./docker/app/public:/var/www/app/public:ro
+    depends_on:
+      - app
+    ports:
+      - "80:80"
+    networks:
+      - invoiceninja
+
+  app:
+    build: 
+      context: ./alpine/5/
+      args: 
+        INVOICENINJA_VERSION: 5.3.23
+    env_file: env
+    restart: always
+    volumes:
+      - ./config/hosts:/etc/hosts:ro
+      - ./docker/app/public:/var/www/app/public:rw,delegated
+      - ./docker/app/storage:/var/www/app/storage:rw,delegated
+    depends_on:
+      - db
+    networks:
+      - invoiceninja
+
+  db:
+    image: mysql:5
+    ports:
+      - "3305:3306"
+    restart: always
+    env_file: env
+    volumes:
+      - ./docker/mysql/data:/var/lib/mysql:rw,delegated
+    networks:
+      - invoiceninja
+
+networks:
+  invoiceninja:
