@@ -2,7 +2,7 @@ name: Check Invoice Ninja version
 
 on:
   schedule:
-    - cron:  '37 14 * * 3'
+    - cron:  '30 8 * * 2'
 
 jobs:
   version_check:
