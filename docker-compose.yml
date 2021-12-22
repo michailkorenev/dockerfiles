@@ -12,7 +12,7 @@ services:
       - "80:80"
 
   app:
-    image: michailkorenev/invoiceninja:5.3.23
+    image: michailkorenev/invoiceninja:latest
     restart: always
     environment:
       # IN application vars
