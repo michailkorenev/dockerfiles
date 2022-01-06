@@ -1,0 +1,31 @@
+name: Check Invoice Ninja version
+
+on:
+  push
+
+jobs:
+  version_check:
+    name: Check IN version
+    runs-on: ubuntu-latest
+    steps:
+      - name: Version check
+        id: check
+        run: |
+          date
+          NINJA_CURRENT="$(wget -T 15 -qO- https://raw.githubusercontent.com/invoiceninja/invoiceninja/v5-stable/VERSION.txt)"
+          echo "NINJA_CURRENT: ${NINJA_CURRENT}"
+          echo ::set-output name=NINJA_CURRENT::${NINJA_CURRENT}
+    outputs:
+      NINJA_CURRENT: ${{ steps.check.outputs.NINJA_CURRENT }}
+
+  call-publish-image:
+    name: Call publish-image workflow
+    needs: version_check
+    uses: michailkorenev/invoiceninja-dockerfiles/.github/workflows/publish-image.yaml@master
+    with: 
+      INVOICENINJA_VERSION: ${{ needs.version_check.outputs.NINJA_CURRENT }}
+    secrets:
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+        

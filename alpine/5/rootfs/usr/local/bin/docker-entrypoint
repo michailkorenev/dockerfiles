@@ -105,12 +105,12 @@ file_env 'S3_KEY'
 file_env 'S3_SECRET'
 
 # Run IN/Laravel stuff
-if [[ "$1" == "supervisord" ]] || [[ "$1" == "php-fpm" ]]; then
+if [ "$1" == "supervisord" ] || [ "$1" == "php-fpm" ]; then
     in_log INFO "Initialising Invoice Ninja..."
     . invoiceninja-init.sh
 fi
 
-if [ "$(ls -ld /var/www/app/storage | awk '{print $3}')" != "www-data" ]; then
+if [ "$(ls -ld /var/www/app/storage | awk '{print $3}')" != "www-data" ] || [ "$(ls -la /var/www/app/storage/logs/laravel.log | awk '{print $3}')" != "www-data" ] ; then
     echo "chown /var/www/app"
     chown -R www-data:www-data "/var/www/app"
 fi
