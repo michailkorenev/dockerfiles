@@ -30,6 +30,7 @@ services:
       - db
     networks:
       - invoiceninja
+    tty: true
 
   db:
     image: mysql:5
