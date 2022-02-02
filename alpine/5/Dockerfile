@@ -62,6 +62,13 @@ RUN set -eux; \
 # Copy files
 COPY rootfs /
 
+# Solving supervisord EACCESS problem while running as www-data
+RUN adduser www-data tty
+
+# Solving supervisord problem while running as www-data:
+# no permission to run command '/usr/local/bin/shutdown.sh'
+RUN chown www-data:www-data "/usr/local/bin/shutdown.sh"
+
 # Set up app
 ARG INVOICENINJA_VERSION
 ARG BAK_STORAGE_PATH
