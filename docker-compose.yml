@@ -20,6 +20,8 @@ services:
       APP_KEY: "<insert your generated key in here>"
       APP_DEBUG: "false"
       REQUIRE_HTTPS: "false"
+      # Trusted proxies will fix too many redirects issue if REQUIRE_HTTPS is true
+      TRUSTED_PROXIES: "10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
       PHANTOMJS_PDF_GENERATION: "false"
       PDF_GENERATOR: "snappdf"
       QUEUE_CONNECTION: "database"
