@@ -1,7 +1,9 @@
 name: Check Invoice Ninja version
 
 on:
-  push
+  push:
+    branches:
+      - 'master'    
 
 jobs:
   version_check:

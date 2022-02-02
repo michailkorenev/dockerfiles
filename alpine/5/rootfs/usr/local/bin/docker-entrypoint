@@ -113,5 +113,8 @@ fi
 if [ "$(ls -ld /var/www/app/storage | awk '{print $3}')" != "www-data" ] || [ "$(ls -la /var/www/app/storage/logs/laravel.log | awk '{print $3}')" != "www-data" ] ; then
     echo "chown /var/www/app"
     chown -R www-data:www-data "/var/www/app"
+    find /var/www/app/storage /var/www/app/public -type d -exec chmod 755 {} \;
+    find /var/www/app/storage /var/www/app/public -type f -exec chmod 644 {} \;
 fi
+
 exec docker-php-entrypoint "$@"

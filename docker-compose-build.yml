@@ -19,7 +19,7 @@ services:
     build: 
       context: ./alpine/5/
       args: 
-        INVOICENINJA_VERSION: 5.3.49
+        INVOICENINJA_VERSION: 5.3.55
     env_file: env
     restart: always
     volumes:
@@ -30,6 +30,7 @@ services:
       - db
     networks:
       - invoiceninja
+    tty: true
 
   db:
     image: mysql:5
