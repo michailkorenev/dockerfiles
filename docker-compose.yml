@@ -2,7 +2,7 @@ version: '2'
 
 services:
   server:
-    image: michailkorenev/nginx-invoiceninja:0.0.1
+    image: michailkorenev/nginx-invoiceninja:0.0.2
     restart: always
     volumes:
       - ./docker/app/public:/var/www/app/public:ro
@@ -17,7 +17,7 @@ services:
     environment:
       # IN application vars
       APP_URL: "http://in.localhost:8003"
-      APP_KEY: "base64:JXhFLDDmy8xFe1OpxJyhi9KCW+BNQiwkFDENyCVxzTg="
+      APP_KEY: "<insert your generated key in here>"
       APP_DEBUG: "false"
       REQUIRE_HTTPS: "false"
       PHANTOMJS_PDF_GENERATION: "false"
@@ -47,6 +47,7 @@ services:
     volumes:
       - ./docker/app/public:/var/www/app/public:rw,delegated
       - ./docker/app/storage:/var/www/app/storage:rw,delegated
+    tty: true
     depends_on:
       - db
 
