@@ -117,4 +117,14 @@ if [ "$(ls -ld /var/www/app/storage | awk '{print $3}')" != "www-data" ] || [ "$
     find /var/www/app/storage /var/www/app/public -type f -exec chmod 644 {} \;
 fi
 
+# Supervisor runs other processes with www-data user. 
+# This user has no access to /dev/stdout, and processes were causing EACCESS errors.
+# Possible solutions are described here:
+# https://github.com/moby/moby/issues/31243#issuecomment-406879017
+# Unfortunatelly these solutioins have no success in Rancher environment.
+# So, temporary log files were created, and these tail commands reflect all log entries to stdout
+tail -f /var/www/logs/php-fpm.log &
+tail -f /var/www/logs/php-scheduler.log &
+tail -f /var/www/logs/php-worker.log &
+
 exec docker-php-entrypoint "$@"

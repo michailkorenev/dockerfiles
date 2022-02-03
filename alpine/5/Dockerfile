@@ -60,14 +60,7 @@ RUN set -eux; \
     ttf-freefont
 
 # Copy files
-COPY rootfs /
-
-# Solving supervisord EACCESS problem while running as www-data
-RUN adduser www-data tty
-
-# Solving supervisord problem while running as www-data:
-# no permission to run command '/usr/local/bin/shutdown.sh'
-RUN chown www-data:www-data "/usr/local/bin/shutdown.sh"
+COPY --chown=www-data:www-data rootfs /
 
 # Set up app
 ARG INVOICENINJA_VERSION
@@ -88,6 +81,11 @@ RUN /usr/local/bin/composer install --no-dev --quiet
 ENV APP_ENV production
 ENV LOG errorlog
 ENV SNAPPDF_EXECUTABLE_PATH /usr/bin/chromium-browser
+
+# Logging stuff
+RUN mkdir -p /var/www/logs
+RUN touch /var/www/logs/php-fpm.log /var/www/logs/php-scheduler.log /var/www/logs/php-worker.log
+RUN chown -R www-data:www-data /var/www/logs
 
 ENTRYPOINT ["docker-entrypoint"]
 CMD ["supervisord"]
