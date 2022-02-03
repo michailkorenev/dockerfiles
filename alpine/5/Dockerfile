@@ -60,14 +60,12 @@ RUN set -eux; \
     ttf-freefont
 
 # Copy files
-COPY rootfs /
+COPY --chown=www-data:www-data rootfs /
 
-# Solving supervisord EACCESS problem while running as www-data
-RUN adduser www-data tty
-
-# Solving supervisord problem while running as www-data:
-# no permission to run command '/usr/local/bin/shutdown.sh'
-RUN chown www-data:www-data "/usr/local/bin/shutdown.sh"
+COPY --from=build --chown=www-data:www-data /var/www/app /var/www/app
+RUN chown -R www-data:www-data "/var/www/app"
+USER www-data
+WORKDIR /var/www/app
 
 # Set up app
 ARG INVOICENINJA_VERSION
@@ -76,9 +74,6 @@ ARG BAK_PUBLIC_PATH
 ENV INVOICENINJA_VERSION $INVOICENINJA_VERSION
 ENV BAK_STORAGE_PATH $BAK_STORAGE_PATH
 ENV BAK_PUBLIC_PATH $BAK_PUBLIC_PATH
-COPY --from=build --chown=www-data:www-data /var/www/app /var/www/app
-
-WORKDIR /var/www/app
 
 # Do not remove this ENV
 ENV IS_DOCKER true
