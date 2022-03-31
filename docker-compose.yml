@@ -2,7 +2,7 @@ version: '2'
 
 services:
   server:
-    image: michailkorenev/nginx-invoiceninja:0.0.2
+    image: michailkorenev/nginx-invoiceninja:latest
     restart: always
     volumes:
       - ./docker/app/public:/var/www/app/public:ro
